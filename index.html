@@ -1,283 +1,533 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+
+<html lang="en">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.6">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+
+<meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>BhumIQ — Land Intelligence Platform</title>
+
+<style>
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f7f4; color: #444441; }
+
+  .header { background: #0F6E56; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+
+  .logo { color: white; font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
+
+  .logo span { color: #9FE1CB; font-size: 13px; font-weight: 400; display: block; margin-top: 2px; }
+
+  .controls { padding: 16px 24px; background: white; border-bottom: 1px solid #e8e6e0; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+  .controls input { flex: 1; min-width: 200px; padding: 8px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
+
+  .controls select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 13px; background: white; }
+
+  .stats { display: flex; gap: 6px; margin-left: auto; }
+
+  .stat { background: #E1F5EE; color: #0F6E56; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+
+  .grid { padding: 20px 24px; display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
+
+  .card { background: white; border-radius: 12px; border: 1px solid #e8e6e0; padding: 16px; cursor: pointer; transition: box-shadow 0.15s, border-color 0.15s; }
+
+  .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); border-color: #0F6E56; }
+
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+
+  .card-name { font-size: 14px; font-weight: 600; color: #1a1a18; line-height: 1.3; }
+
+  .card-meta { font-size: 12px; color: #888; margin-top: 3px; }
+
+  .score-circle { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; flex-shrink: 0; }
+
+  .card-desc { font-size: 12px; color: #666; line-height: 1.55; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+  .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+
+  .tag { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 20px; }
+
+  .scores-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+
+  .score-item { background: #f8f7f4; border-radius: 6px; padding: 6px 8px; }
+
+  .score-label { font-size: 10px; color: #888; margin-bottom: 2px; }
+
+  .score-val { font-size: 13px; font-weight: 600; }
+
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; overflow-y: auto; padding: 20px; }
+
+  .modal { background: white; border-radius: 16px; max-width: 680px; margin: 0 auto; overflow: hidden; }
+
+  .modal-header { background: #0F6E56; padding: 20px 24px; color: white; }
+
+  .modal-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+
+  .modal-sub { font-size: 13px; opacity: 0.8; }
+
+  .modal-body { padding: 20px 24px; }
+
+  .modal-section { margin-bottom: 20px; }
+
+  .modal-section-title { font-size: 12px; font-weight: 600; color: #888; letter-spacing: 0.05em; margin-bottom: 10px; text-transform: uppercase; }
+
+  .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+  .info-item { background: #f8f7f4; border-radius: 8px; padding: 10px 12px; }
+
+  .info-label { font-size: 11px; color: #888; margin-bottom: 2px; }
+
+  .info-val { font-size: 13px; font-weight: 500; color: #333; }
+
+  .scores-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+
+  .score-card { border-radius: 8px; padding: 10px 12px; }
+
+  .score-card-label { font-size: 11px; margin-bottom: 4px; opacity: 0.8; }
+
+  .score-card-val { font-size: 18px; font-weight: 600; }
+
+  .score-card-bar { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.3); margin-top: 6px; overflow: hidden; }
+
+  .score-card-fill { height: 100%; border-radius: 2px; background: rgba(255,255,255,0.8); }
+
+  .thesis-box { background: #E1F5EE; border-radius: 8px; padding: 12px 14px; font-size: 13px; color: #333; line-height: 1.6; }
+
+  .thesis-label { font-size: 11px; font-weight: 600; color: #0F6E56; margin-bottom: 6px; }
+
+  .confidence-bar { display: flex; align-items: center; gap: 10px; }
+
+  .conf-track { flex: 1; height: 6px; background: #e8e6e0; border-radius: 3px; overflow: hidden; }
+
+  .conf-fill { height: 100%; border-radius: 3px; background: #0F6E56; }
+
+  .conf-label { font-size: 12px; font-weight: 500; color: #0F6E56; }
+
+  .modal-close { display: block; width: 100%; padding: 12px; background: #f8f7f4; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; color: #666; margin-top: 4px; }
+
+  .modal-close:hover { background: #e8e6e0; }
+
+  .empty { text-align: center; padding: 60px 20px; color: #888; font-size: 14px; grid-column: 1/-1; }
+
+  .loading { text-align: center; padding: 60px 20px; color: #0F6E56; font-size: 14px; grid-column: 1/-1; }
+
+</style>
+
 </head>
+
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1">&lt;meta charset="UTF-8" /&gt;</p>
-<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</p>
-<p class="p1">&lt;title&gt;BhumIQ — Land Intelligence Platform&lt;/title&gt;</p>
-<p class="p1">&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>* { box-sizing: border-box; margin: 0; padding: 0; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f7f4; color: #444441; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.header { background: #0F6E56; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.logo { color: white; font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.logo span { color: #9FE1CB; font-size: 13px; font-weight: 400; display: block; margin-top: 2px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.controls { padding: 16px 24px; background: white; border-bottom: 1px solid #e8e6e0; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.controls input { flex: 1; min-width: 200px; padding: 8px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.controls select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 13px; background: white; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.stats { display: flex; gap: 6px; margin-left: auto; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.stat { background: #E1F5EE; color: #0F6E56; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.grid { padding: 20px 24px; display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.card { background: white; border-radius: 12px; border: 1px solid #e8e6e0; padding: 16px; cursor: pointer; transition: box-shadow 0.15s, border-color 0.15s; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); border-color: #0F6E56; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.card-name { font-size: 14px; font-weight: 600; color: #1a1a18; line-height: 1.3; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.card-meta { font-size: 12px; color: #888; margin-top: 3px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.score-circle { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; flex-shrink: 0; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.card-desc { font-size: 12px; color: #666; line-height: 1.55; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.tag { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 20px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.scores-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.score-item { background: #f8f7f4; border-radius: 6px; padding: 6px 8px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.score-label { font-size: 10px; color: #888; margin-bottom: 2px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.score-val { font-size: 13px; font-weight: 600; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; overflow-y: auto; padding: 20px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.modal { background: white; border-radius: 16px; max-width: 680px; margin: 0 auto; overflow: hidden; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.modal-header { background: #0F6E56; padding: 20px 24px; color: white; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.modal-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.modal-sub { font-size: 13px; opacity: 0.8; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.modal-body { padding: 20px 24px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.modal-section { margin-bottom: 20px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.modal-section-title { font-size: 12px; font-weight: 600; color: #888; letter-spacing: 0.05em; margin-bottom: 10px; text-transform: uppercase; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.info-item { background: #f8f7f4; border-radius: 8px; padding: 10px 12px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.info-label { font-size: 11px; color: #888; margin-bottom: 2px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.info-val { font-size: 13px; font-weight: 500; color: #333; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.scores-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.score-card { border-radius: 8px; padding: 10px 12px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.score-card-label { font-size: 11px; margin-bottom: 4px; opacity: 0.8; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.score-card-val { font-size: 18px; font-weight: 600; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.score-card-bar { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.3); margin-top: 6px; overflow: hidden; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.score-card-fill { height: 100%; border-radius: 2px; background: rgba(255,255,255,0.8); }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.thesis-box { background: #E1F5EE; border-radius: 8px; padding: 12px 14px; font-size: 13px; color: #333; line-height: 1.6; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.thesis-label { font-size: 11px; font-weight: 600; color: #0F6E56; margin-bottom: 6px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.confidence-bar { display: flex; align-items: center; gap: 10px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.conf-track { flex: 1; height: 6px; background: #e8e6e0; border-radius: 3px; overflow: hidden; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.conf-fill { height: 100%; border-radius: 3px; background: #0F6E56; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.conf-label { font-size: 12px; font-weight: 500; color: #0F6E56; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.modal-close { display: block; width: 100%; padding: 12px; background: #f8f7f4; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; color: #666; margin-top: 4px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.modal-close:hover { background: #e8e6e0; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.empty { text-align: center; padding: 60px 20px; color: #888; font-size: 14px; grid-column: 1/-1; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.loading { text-align: center; padding: 60px 20px; color: #0F6E56; font-size: 14px; grid-column: 1/-1; }</p>
-<p class="p1">&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="header"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="logo"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>BhumIQ</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span&gt;AI Land Intelligence Platform — Hyderabad Region Prototype&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="color:rgba(255,255,255,0.7);font-size:12px"&gt;v0.1 Prototype&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="controls"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;input type="text" id="search" placeholder='Search by location, soil type, or use case...' oninput="filterAndRender()" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;select id="district" onchange="filterAndRender()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value=""&gt;All Districts&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="Ranga Reddy"&gt;Ranga Reddy&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="Sangareddy"&gt;Sangareddy&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="Nalgonda"&gt;Nalgonda&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="Medchal"&gt;Medchal&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="Mahbubnagar"&gt;Mahbubnagar&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="Vikarabad"&gt;Vikarabad&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="Medak"&gt;Medak&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;select id="usecase" onchange="filterAndRender()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value=""&gt;All Use Cases&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="Cold Storage"&gt;Cold Storage&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="Solar Farm"&gt;Solar Farm&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="Data Centre"&gt;Data Centre&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="Logistics / Warehouse"&gt;Logistics&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="Residential"&gt;Residential&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="Agricultural"&gt;Agricultural&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="Industrial"&gt;Industrial&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;select id="minscore" onchange="filterAndRender()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="0"&gt;All Scores&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="9"&gt;Score 9+&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="8.5"&gt;Score 8.5+&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="8"&gt;Score 8+&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="stats"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stat" id="count-stat"&gt;Loading...&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="grid" id="grid"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="loading"&gt;Loading parcels from database...&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="modal-overlay" id="modal" onclick="closeModal(event)"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="modal" id="modal-content"&gt;&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;script&gt;</p>
-<p class="p1">const SUPABASE_URL = 'https://bfzrfnhifgmcwyvdsect.supabase.co';</p>
-<p class="p1">const SUPABASE_KEY = 'PASTE_YOUR_ANON_KEY_HERE';</p>
-<p class="p2"><br></p>
-<p class="p1">let allParcels = [];</p>
-<p class="p2"><br></p>
-<p class="p1">async function loadParcels() {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const res = await fetch(</p>
-<p class="p1"><span class="Apple-converted-space">      </span>`${SUPABASE_URL}/rest/v1/parcels?select=*&amp;order=overall_score.desc`,</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{ headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>allParcels = await res.json();</p>
-<p class="p1"><span class="Apple-converted-space">    </span>filterAndRender();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>} catch(e) {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('grid').innerHTML = '&lt;div class="empty"&gt;Error loading data. Check your Supabase URL and key.&lt;/div&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function scoreColor(s) {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if (s &gt;= 9) return { bg: '#E1F5EE', text: '#0F6E56' };</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if (s &gt;= 8) return { bg: '#E6F1FB', text: '#185FA5' };</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if (s &gt;= 7) return { bg: '#FAEEDA', text: '#854F0B' };</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return { bg: '#F1EFE8', text: '#5F5E5A' };</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function useColor(use) {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const map = {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'Cold Storage': { bg: '#E1F5EE', text: '#0F6E56' },</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'Solar Farm': { bg: '#FAEEDA', text: '#854F0B' },</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'Data Centre': { bg: '#E6F1FB', text: '#185FA5' },</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'Logistics / Warehouse': { bg: '#F1EFE8', text: '#5F5E5A' },</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'Residential': { bg: '#FBEAF0', text: '#72243E' },</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'Agricultural': { bg: '#EAF3DE', text: '#3B6D11' },</p>
-<p class="p1"><span class="Apple-converted-space">    </span>'Industrial': { bg: '#EEEDFE', text: '#3C3489' }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return map[use] || { bg: '#F1EFE8', text: '#444441' };</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function filterAndRender() {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const q = document.getElementById('search').value.toLowerCase();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const district = document.getElementById('district').value;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const usecase = document.getElementById('usecase').value;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const minscore = parseFloat(document.getElementById('minscore').value);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>let filtered = allParcels.filter(p =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (q &amp;&amp; !p.name.toLowerCase().includes(q) &amp;&amp; !p.district.toLowerCase().includes(q) &amp;&amp; !(p.soil_type||'').toLowerCase().includes(q) &amp;&amp; !(p.top_use||'').toLowerCase().includes(q) &amp;&amp; !(p.investment_thesis||'').toLowerCase().includes(q)) return false;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (district &amp;&amp; p.district !== district) return false;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (usecase &amp;&amp; p.top_use !== usecase) return false;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (minscore &gt; 0 &amp;&amp; p.overall_score &lt; minscore) return false;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>return true;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('count-stat').textContent = `${filtered.length} parcels`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const grid = document.getElementById('grid');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>if (!filtered.length) {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>grid.innerHTML = '&lt;div class="empty"&gt;No parcels match your filters.&lt;/div&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>grid.innerHTML = filtered.map((p, i) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const sc = scoreColor(p.overall_score);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const uc = useColor(p.top_use);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>return `&lt;div class="card" onclick="showModal(${allParcels.indexOf(p)})"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="card-top"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="card-name"&gt;${p.name}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="card-meta"&gt;${p.district} · ${p.mandal} · ${p.area_acres} acres&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="score-circle" style="background:${sc.bg};color:${sc.text}"&gt;${p.overall_score}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="card-tags"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="tag" style="background:${uc.bg};color:${uc.text}"&gt;${p.top_use}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="tag" style="background:#F1EFE8;color:#5F5E5A"&gt;${p.soil_type}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="tag" style="background:#E6F1FB;color:#185FA5"&gt;₹${(p.guidance_value_per_sqyd/1000).toFixed(0)}K/sqyd&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="card-desc"&gt;${p.investment_thesis}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="scores-row"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="score-item"&gt;&lt;div class="score-label"&gt;Cold Storage&lt;/div&gt;&lt;div class="score-val" style="color:#0F6E56"&gt;${p.cold_storage_score}&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="score-item"&gt;&lt;div class="score-label"&gt;Solar&lt;/div&gt;&lt;div class="score-val" style="color:#854F0B"&gt;${p.solar_score}&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="score-item"&gt;&lt;div class="score-label"&gt;Data Centre&lt;/div&gt;&lt;div class="score-val" style="color:#185FA5"&gt;${p.data_centre_score}&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}).join('');</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function showModal(index) {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const p = allParcels[index];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const sc = scoreColor(p.overall_score);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const uc = useColor(p.top_use);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('modal-content').innerHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="modal-header"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="modal-title"&gt;${p.name}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="modal-sub"&gt;${p.district} District · ${p.mandal} Mandal · ${p.area_acres} acres · ${p.soil_type}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="modal-body"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="modal-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="modal-section-title"&gt;Investment Thesis&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="thesis-box"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="thesis-label"&gt;TOP USE: ${p.top_use}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>${p.investment_thesis}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="modal-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="modal-section-title"&gt;Use Case Scores&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="scores-grid"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>${[['Cold Storage','#0F6E56','#E1F5EE',p.cold_storage_score],['Solar Farm','#854F0B','#FAEEDA',p.solar_score],['Data Centre','#185FA5','#E6F1FB',p.data_centre_score],['Logistics','#5F5E5A','#F1EFE8',p.logistics_score],['Residential','#72243E','#FBEAF0',p.residential_score],['Agricultural','#3B6D11','#EAF3DE',p.agricultural_score]].map(([label,color,bg,val]) =&gt; `</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="score-card" style="background:${bg};color:${color}"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="score-card-label"&gt;${label}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="score-card-val"&gt;${val}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="score-card-bar"&gt;&lt;div class="score-card-fill" style="width:${val*10}%"&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;`).join('')}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="modal-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="modal-section-title"&gt;Land Intelligence&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="info-grid"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="info-item"&gt;&lt;div class="info-label"&gt;NH Distance&lt;/div&gt;&lt;div class="info-val"&gt;${p.nh_distance_km} km&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="info-item"&gt;&lt;div class="info-label"&gt;Power Substation&lt;/div&gt;&lt;div class="info-val"&gt;${p.substation_33kv_km} km (33kV)&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="info-item"&gt;&lt;div class="info-label"&gt;Flood Risk&lt;/div&gt;&lt;div class="info-val"&gt;${['','Very Low','Low','Moderate','High','Very High'][p.flood_risk_score] || p.flood_risk_score}&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="info-item"&gt;&lt;div class="info-label"&gt;Groundwater Depth&lt;/div&gt;&lt;div class="info-val"&gt;${p.groundwater_depth_m}m&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="info-item"&gt;&lt;div class="info-label"&gt;Annual AQI&lt;/div&gt;&lt;div class="info-val"&gt;${p.aqi_annual} (${p.aqi_annual &lt; 50 ? 'Good' : p.aqi_annual &lt; 100 ? 'Moderate' : 'Poor'})&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="info-item"&gt;&lt;div class="info-label"&gt;Railway Distance&lt;/div&gt;&lt;div class="info-val"&gt;${p.railway_distance_km} km&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="info-item"&gt;&lt;div class="info-label"&gt;Nearest School&lt;/div&gt;&lt;div class="info-val"&gt;${p.school_nearest_km} km&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="info-item"&gt;&lt;div class="info-label"&gt;Nearest Hospital&lt;/div&gt;&lt;div class="info-val"&gt;${p.hospital_nearest_km} km&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="info-item"&gt;&lt;div class="info-label"&gt;Guidance Value&lt;/div&gt;&lt;div class="info-val"&gt;₹${p.guidance_value_per_sqyd.toLocaleString()}/sqyd&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="info-item"&gt;&lt;div class="info-label"&gt;Price Trend (24m)&lt;/div&gt;&lt;div class="info-val" style="color:${p.price_trend_24m_pct &gt; 20 ? '#0F6E56' : '#444'}"&gt;+${p.price_trend_24m_pct}%&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="info-item"&gt;&lt;div class="info-label"&gt;Current Use&lt;/div&gt;&lt;div class="info-val"&gt;${p.current_use}&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="info-item"&gt;&lt;div class="info-label"&gt;Overall Score&lt;/div&gt;&lt;div class="info-val" style="color:${sc.text};font-size:18px;font-weight:700"&gt;${p.overall_score}&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="modal-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="modal-section-title"&gt;Data Confidence&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="confidence-bar"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="conf-track"&gt;&lt;div class="conf-fill" style="width:${p.data_confidence}%"&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="conf-label"&gt;${p.data_confidence}%&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="modal-close" onclick="document.getElementById('modal').style.display='none'"&gt;Close&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('modal').style.display = 'block';</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function closeModal(e) {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if (e.target === document.getElementById('modal')) {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('modal').style.display = 'none';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">loadParcels();</p>
-<p class="p1">&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
-<p class="p1">const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmenJmbmhpZmdtY3d5dmRzZWN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2Mjg2NDYsImV4cCI6MjA5NTIwNDY0Nn0.PSmVSSDXnBu-zmK15bl02DtYPodREjOTiy4hWT0Oqho';</p>
+
+
+
+<div class="header">
+
+  <div class="logo">
+
+    BhumIQ
+
+    <span>AI Land Intelligence Platform — Hyderabad Region Prototype</span>
+
+  </div>
+
+  <div style="color:rgba(255,255,255,0.7);font-size:12px">v0.1 Prototype</div>
+
+</div>
+
+
+
+<div class="controls">
+
+  <input type="text" id="search" placeholder='Search by location, soil type, or use case...' oninput="filterAndRender()" />
+
+  <select id="district" onchange="filterAndRender()">
+
+    <option value="">All Districts</option>
+
+    <option value="Ranga Reddy">Ranga Reddy</option>
+
+    <option value="Sangareddy">Sangareddy</option>
+
+    <option value="Nalgonda">Nalgonda</option>
+
+    <option value="Medchal">Medchal</option>
+
+    <option value="Mahbubnagar">Mahbubnagar</option>
+
+    <option value="Vikarabad">Vikarabad</option>
+
+    <option value="Medak">Medak</option>
+
+  </select>
+
+  <select id="usecase" onchange="filterAndRender()">
+
+    <option value="">All Use Cases</option>
+
+    <option value="Cold Storage">Cold Storage</option>
+
+    <option value="Solar Farm">Solar Farm</option>
+
+    <option value="Data Centre">Data Centre</option>
+
+    <option value="Logistics / Warehouse">Logistics</option>
+
+    <option value="Residential">Residential</option>
+
+    <option value="Agricultural">Agricultural</option>
+
+    <option value="Industrial">Industrial</option>
+
+  </select>
+
+  <select id="minscore" onchange="filterAndRender()">
+
+    <option value="0">All Scores</option>
+
+    <option value="9">Score 9+</option>
+
+    <option value="8.5">Score 8.5+</option>
+
+    <option value="8">Score 8+</option>
+
+  </select>
+
+  <div class="stats">
+
+    <div class="stat" id="count-stat">Loading...</div>
+
+  </div>
+
+</div>
+
+
+
+<div class="grid" id="grid">
+
+  <div class="loading">Loading parcels from database...</div>
+
+</div>
+
+
+
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+
+  <div class="modal" id="modal-content"></div>
+
+</div>
+
+
+
+<script>
+
+const SUPABASE_URL = 'https://bfzrfnhifgmcwyvdsect.supabase.co';
+
+const SUPABASE_KEY = 'PASTE_YOUR_ANON_KEY_HERE';
+
+
+
+let allParcels = [];
+
+
+
+async function loadParcels() {
+
+  try {
+
+    const res = await fetch(
+
+      `${SUPABASE_URL}/rest/v1/parcels?select=*&order=overall_score.desc`,
+
+      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+
+    );
+
+    allParcels = await res.json();
+
+    filterAndRender();
+
+  } catch(e) {
+
+    document.getElementById('grid').innerHTML = '<div class="empty">Error loading data. Check your Supabase URL and key.</div>';
+
+  }
+
+}
+
+
+
+function scoreColor(s) {
+
+  if (s >= 9) return { bg: '#E1F5EE', text: '#0F6E56' };
+
+  if (s >= 8) return { bg: '#E6F1FB', text: '#185FA5' };
+
+  if (s >= 7) return { bg: '#FAEEDA', text: '#854F0B' };
+
+  return { bg: '#F1EFE8', text: '#5F5E5A' };
+
+}
+
+
+
+function useColor(use) {
+
+  const map = {
+
+    'Cold Storage': { bg: '#E1F5EE', text: '#0F6E56' },
+
+    'Solar Farm': { bg: '#FAEEDA', text: '#854F0B' },
+
+    'Data Centre': { bg: '#E6F1FB', text: '#185FA5' },
+
+    'Logistics / Warehouse': { bg: '#F1EFE8', text: '#5F5E5A' },
+
+    'Residential': { bg: '#FBEAF0', text: '#72243E' },
+
+    'Agricultural': { bg: '#EAF3DE', text: '#3B6D11' },
+
+    'Industrial': { bg: '#EEEDFE', text: '#3C3489' }
+
+  };
+
+  return map[use] || { bg: '#F1EFE8', text: '#444441' };
+
+}
+
+
+
+function filterAndRender() {
+
+  const q = document.getElementById('search').value.toLowerCase();
+
+  const district = document.getElementById('district').value;
+
+  const usecase = document.getElementById('usecase').value;
+
+  const minscore = parseFloat(document.getElementById('minscore').value);
+
+
+
+  let filtered = allParcels.filter(p => {
+
+    if (q && !p.name.toLowerCase().includes(q) && !p.district.toLowerCase().includes(q) && !(p.soil_type||'').toLowerCase().includes(q) && !(p.top_use||'').toLowerCase().includes(q) && !(p.investment_thesis||'').toLowerCase().includes(q)) return false;
+
+    if (district && p.district !== district) return false;
+
+    if (usecase && p.top_use !== usecase) return false;
+
+    if (minscore > 0 && p.overall_score < minscore) return false;
+
+    return true;
+
+  });
+
+
+
+  document.getElementById('count-stat').textContent = `${filtered.length} parcels`;
+
+  const grid = document.getElementById('grid');
+
+
+
+  if (!filtered.length) {
+
+    grid.innerHTML = '<div class="empty">No parcels match your filters.</div>';
+
+    return;
+
+  }
+
+
+
+  grid.innerHTML = filtered.map((p, i) => {
+
+    const sc = scoreColor(p.overall_score);
+
+    const uc = useColor(p.top_use);
+
+    return `<div class="card" onclick="showModal(${allParcels.indexOf(p)})">
+
+      <div class="card-top">
+
+        <div>
+
+          <div class="card-name">${p.name}</div>
+
+          <div class="card-meta">${p.district} · ${p.mandal} · ${p.area_acres} acres</div>
+
+        </div>
+
+        <div class="score-circle" style="background:${sc.bg};color:${sc.text}">${p.overall_score}</div>
+
+      </div>
+
+      <div class="card-tags">
+
+        <span class="tag" style="background:${uc.bg};color:${uc.text}">${p.top_use}</span>
+
+        <span class="tag" style="background:#F1EFE8;color:#5F5E5A">${p.soil_type}</span>
+
+        <span class="tag" style="background:#E6F1FB;color:#185FA5">₹${(p.guidance_value_per_sqyd/1000).toFixed(0)}K/sqyd</span>
+
+      </div>
+
+      <div class="card-desc">${p.investment_thesis}</div>
+
+      <div class="scores-row">
+
+        <div class="score-item"><div class="score-label">Cold Storage</div><div class="score-val" style="color:#0F6E56">${p.cold_storage_score}</div></div>
+
+        <div class="score-item"><div class="score-label">Solar</div><div class="score-val" style="color:#854F0B">${p.solar_score}</div></div>
+
+        <div class="score-item"><div class="score-label">Data Centre</div><div class="score-val" style="color:#185FA5">${p.data_centre_score}</div></div>
+
+      </div>
+
+    </div>`;
+
+  }).join('');
+
+}
+
+
+
+function showModal(index) {
+
+  const p = allParcels[index];
+
+  const sc = scoreColor(p.overall_score);
+
+  const uc = useColor(p.top_use);
+
+  document.getElementById('modal-content').innerHTML = `
+
+    <div class="modal-header">
+
+      <div class="modal-title">${p.name}</div>
+
+      <div class="modal-sub">${p.district} District · ${p.mandal} Mandal · ${p.area_acres} acres · ${p.soil_type}</div>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="modal-section">
+
+        <div class="modal-section-title">Investment Thesis</div>
+
+        <div class="thesis-box">
+
+          <div class="thesis-label">TOP USE: ${p.top_use}</div>
+
+          ${p.investment_thesis}
+
+        </div>
+
+      </div>
+
+      <div class="modal-section">
+
+        <div class="modal-section-title">Use Case Scores</div>
+
+        <div class="scores-grid">
+
+          ${[['Cold Storage','#0F6E56','#E1F5EE',p.cold_storage_score],['Solar Farm','#854F0B','#FAEEDA',p.solar_score],['Data Centre','#185FA5','#E6F1FB',p.data_centre_score],['Logistics','#5F5E5A','#F1EFE8',p.logistics_score],['Residential','#72243E','#FBEAF0',p.residential_score],['Agricultural','#3B6D11','#EAF3DE',p.agricultural_score]].map(([label,color,bg,val]) => `
+
+          <div class="score-card" style="background:${bg};color:${color}">
+
+            <div class="score-card-label">${label}</div>
+
+            <div class="score-card-val">${val}</div>
+
+            <div class="score-card-bar"><div class="score-card-fill" style="width:${val*10}%"></div></div>
+
+          </div>`).join('')}
+
+        </div>
+
+      </div>
+
+      <div class="modal-section">
+
+        <div class="modal-section-title">Land Intelligence</div>
+
+        <div class="info-grid">
+
+          <div class="info-item"><div class="info-label">NH Distance</div><div class="info-val">${p.nh_distance_km} km</div></div>
+
+          <div class="info-item"><div class="info-label">Power Substation</div><div class="info-val">${p.substation_33kv_km} km (33kV)</div></div>
+
+          <div class="info-item"><div class="info-label">Flood Risk</div><div class="info-val">${['','Very Low','Low','Moderate','High','Very High'][p.flood_risk_score] || p.flood_risk_score}</div></div>
+
+          <div class="info-item"><div class="info-label">Groundwater Depth</div><div class="info-val">${p.groundwater_depth_m}m</div></div>
+
+          <div class="info-item"><div class="info-label">Annual AQI</div><div class="info-val">${p.aqi_annual} (${p.aqi_annual < 50 ? 'Good' : p.aqi_annual < 100 ? 'Moderate' : 'Poor'})</div></div>
+
+          <div class="info-item"><div class="info-label">Railway Distance</div><div class="info-val">${p.railway_distance_km} km</div></div>
+
+          <div class="info-item"><div class="info-label">Nearest School</div><div class="info-val">${p.school_nearest_km} km</div></div>
+
+          <div class="info-item"><div class="info-label">Nearest Hospital</div><div class="info-val">${p.hospital_nearest_km} km</div></div>
+
+          <div class="info-item"><div class="info-label">Guidance Value</div><div class="info-val">₹${p.guidance_value_per_sqyd.toLocaleString()}/sqyd</div></div>
+
+          <div class="info-item"><div class="info-label">Price Trend (24m)</div><div class="info-val" style="color:${p.price_trend_24m_pct > 20 ? '#0F6E56' : '#444'}">+${p.price_trend_24m_pct}%</div></div>
+
+          <div class="info-item"><div class="info-label">Current Use</div><div class="info-val">${p.current_use}</div></div>
+
+          <div class="info-item"><div class="info-label">Overall Score</div><div class="info-val" style="color:${sc.text};font-size:18px;font-weight:700">${p.overall_score}</div></div>
+
+        </div>
+
+      </div>
+
+      <div class="modal-section">
+
+        <div class="modal-section-title">Data Confidence</div>
+
+        <div class="confidence-bar">
+
+          <div class="conf-track"><div class="conf-fill" style="width:${p.data_confidence}%"></div></div>
+
+          <div class="conf-label">${p.data_confidence}%</div>
+
+        </div>
+
+      </div>
+
+      <button class="modal-close" onclick="document.getElementById('modal').style.display='none'">Close</button>
+
+    </div>`;
+
+  document.getElementById('modal').style.display = 'block';
+
+}
+
+
+
+function closeModal(e) {
+
+  if (e.target === document.getElementById('modal')) {
+
+    document.getElementById('modal').style.display = 'none';
+
+  }
+
+}
+
+
+
+loadParcels();
+
+</script>
+
 </body>
+
 </html>
+
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmenJmbmhpZmdtY3d5dmRzZWN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2Mjg2NDYsImV4cCI6MjA5NTIwNDY0Nn0.PSmVSSDXnBu-zmK15bl02DtYPodREjOTiy4hWT0Oqho';
